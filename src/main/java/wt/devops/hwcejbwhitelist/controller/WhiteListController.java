@@ -1,13 +1,13 @@
 package wt.devops.hwcejbwhitelist.controller;
 
 import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import wt.devops.hwcejbwhitelist.service.WhitelistService;
 
 import javax.annotation.Resource;
-import java.util.*;
 
 /**
  * Description
@@ -19,6 +19,8 @@ import java.util.*;
 @RequestMapping(value="/huaweicloud/ejb/whitelist")
 public class WhiteListController {
 
+    private static final Logger logger = LoggerFactory.getLogger(WhiteListController.class);
+
     @Resource
     private WhitelistService whitelistService;
 
@@ -26,6 +28,8 @@ public class WhiteListController {
     @ApiImplicitParam(name = "context", value = "Huaweicloud", required = true, dataType = "HuaweicloudContext")
     @PutMapping(value="/switch-on")
     public void switchOnWhitelist(@RequestBody HuaweicloudContext context){
+
+        logger.info("启用EJB白名单:{}", context.getWhitelist());
 
         boolean isUpdateSwitch = Boolean.TRUE;
         boolean isSwitchOn = Boolean.TRUE;
@@ -38,6 +42,8 @@ public class WhiteListController {
     @PutMapping(value="/switch-off")
     public void switchOffWhitelist(@RequestBody HuaweicloudContext context){
 
+        logger.info("停用EJB白名单:{}", context.getWhitelist());
+
         boolean isUpdateSwitch = Boolean.TRUE;
         boolean isSwitchOn = Boolean.FALSE;
         whitelistService.updateWhitelist(context, isUpdateSwitch, isSwitchOn);
@@ -48,6 +54,8 @@ public class WhiteListController {
     @ApiImplicitParam(name = "context", value = "Huaweicloud", required = true, dataType = "HuaweicloudContext")
     @PostMapping(value="")
     public void uploadWhitelist(@RequestBody HuaweicloudContext context){
+
+        logger.info("上传EJB白名单:{}", context.getWhitelist());
 
         boolean isUpdateSwitch = Boolean.FALSE;
         boolean isSwitchOn = Boolean.FALSE;

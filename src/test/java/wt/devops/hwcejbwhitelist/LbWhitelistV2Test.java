@@ -43,12 +43,12 @@ import org.junit.Test;
 
 	@BeforeClass
 	public static void initialClient() {
-
 		String region = "cn-south-1";
 		String domain = "myhuaweicloud.com";
 		String projectId = "0";
 		String ak = "0";
-		String sk = "O";
+		String sk = "0";
+
 
 		OSFactory.enableHttpLoggingFilter(true);
 
