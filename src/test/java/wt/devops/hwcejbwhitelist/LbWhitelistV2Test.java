@@ -36,7 +36,6 @@ import org.junit.Test;
 
  public class LbWhitelistV2Test  {
 
-	private  static OSClient.OSClientV3 osclient = null;
 	private  static OSClient.OSClientAKSK osClientAKSK = null;
 
 	private static final String W_WHITELIST = "58.247.134.234,58.250.241.14,58.250.250.110,116.6.64.238,116.205.13.12,116.228.161.58,140.206.70.66,180.167.41.198,183.62.219.125,183.238.198.16,202.104.136.198,202.170.131.22,202.170.134.64,202.170.134.65,202.170.134.66,202.170.134.67,203.166.220.2,210.75.22.64,210.75.22.65,210.75.22.66,210.75.22.67,218.13.10.130,218.17.161.132,219.134.64.76,221.235.37.138,223.255.43.11";
@@ -44,14 +43,12 @@ import org.junit.Test;
 
 	@BeforeClass
 	public static void initialClient() {
-		// add override endpoint
-
 
 		String region = "cn-south-1";
 		String domain = "myhuaweicloud.com";
-		String projectId = "0225be3a019486901";
-		String ak = "0NOQ6HRWCGAPXC";
-		String sk = "ncXygdg1E3IddkXjJYebDrLO";
+		String projectId = "0";
+		String ak = "0";
+		String sk = "O";
 
 		OSFactory.enableHttpLoggingFilter(true);
 
