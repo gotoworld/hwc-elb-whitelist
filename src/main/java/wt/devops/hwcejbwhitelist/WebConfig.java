@@ -11,7 +11,7 @@ import wt.devops.hwcejbwhitelist.intercepter.AuditInterceptor;
 /**
  * @ClassName: WebConfig
  * @Description:
- * @author
+ * @author uname.chen@gmail.com
  * @date
  */
 @Configuration

@@ -11,7 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * Description
  *
+ * @author uname.chen
+ * @date 19-2-20
  */
 @Component
 public class AuditInterceptor implements HandlerInterceptor {

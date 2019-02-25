@@ -1,8 +1,14 @@
 package wt.devops.hwcejbwhitelist.utils;
  
  import javax.servlet.http.HttpServletRequest;
- 
 
+
+/**
+ * Description
+ *
+ * @author uname.chen
+ * @date 19-2-20
+ */
  public class IPUtils {
 
      /**
