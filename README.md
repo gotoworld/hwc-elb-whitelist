@@ -1,2 +1,2 @@
-# hwc-ejb-whitelist
-Huaweicloud EJB Whitelist
+# hwc-elb-whitelist
+Huaweicloud ELB Whitelist

@@ -1,17 +1,18 @@
-package wt.devops.hwcejbwhitelist.service;
+package wt.devops.hwcelbwhitelist.service;
 
 import com.huawei.openstack4j.api.OSClient;
 import com.huawei.openstack4j.core.transport.Config;
 import com.huawei.openstack4j.model.network.ext.ListenerV2;
+import com.huawei.openstack4j.model.network.ext.LoadBalancerV2;
 import com.huawei.openstack4j.openstack.OSFactory;
+import com.huawei.openstack4j.openstack.networking.domain.ext.ListItem;
 import com.huawei.openstack4j.openstack.networking.domain.ext.NeutronWhitelist;
 import com.huawei.openstack4j.openstack.networking.domain.ext.NeutronWhitelistUpdate;
 import org.springframework.stereotype.Service;
-import wt.devops.hwcejbwhitelist.controller.HuaweicloudContext;
+import wt.devops.hwcelbwhitelist.controller.HuaweicloudContext;
+import wt.devops.hwcelbwhitelist.pojo.WhitelistVO;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Description
@@ -21,6 +22,79 @@ import java.util.Map;
  */
 @Service
 public class WhitelistServiceImpl implements WhitelistService {
+
+
+    /**
+     *
+     * @param context
+     * @return
+     */
+    @Override
+    public List<WhitelistVO> getWhitelist(HuaweicloudContext context){
+
+        // 1. init huaweicloud SDK client
+        OSClient.OSClientAKSK osClient = initialClient(context);
+
+
+
+        // 2. compose whitelistVO with ELB
+        Map<String, WhitelistVO> map = new HashMap<String, WhitelistVO>();
+
+
+        List<? extends LoadBalancerV2> elbList = osClient.networking().lbaasV2().loadbalancer().list();
+        if (elbList == null || elbList.isEmpty()) {
+            return new ArrayList<WhitelistVO>();
+        }
+
+        for (LoadBalancerV2 lb : elbList) {
+            List<ListItem>  listenerItems = lb.getListeners();
+            if(listenerItems != null){
+                for (ListItem listItem : listenerItems) {
+                      map.put(listItem.getId(), new WhitelistVO(lb.getId(),lb.getName()));
+                }
+            }
+        }
+
+        //3. compose whitelistVO with Listener
+        List<? extends ListenerV2> listenerList = osClient.networking().lbaasV2().listener().list();
+
+        if (listenerList != null) {
+            for (ListenerV2 listenerV2 : listenerList) {
+                WhitelistVO vo = map.get(listenerV2.getId());
+                vo.setListenerId(listenerV2.getId());
+                vo.setListenerName(listenerV2.getName());
+
+                vo.setId(listenerV2.getId()); //
+            }
+        }
+
+
+        // 4. compose whitelistVO with Whitelist
+        NeutronWhitelist.NeutronWhitelists res = osClient.networking().lbaasV2().lbWhitelist().list();
+        List<NeutronWhitelist> whitelists  = res.getList();
+
+        if(whitelists != null){
+            for (NeutronWhitelist whitelist1 : whitelists) {
+                WhitelistVO vo = map.get(whitelist1.getListenerId());
+                vo.setWhitelist(whitelist1.getWhitelist());
+                vo.setWhitelistId(whitelist1.getId());
+                vo.setEnableWhitelist(whitelist1.isEnableWhitelist());
+
+//                vo.setId(whitelist1.getId());
+            }
+        }
+
+
+        //5. sorting
+        List<WhitelistVO> list = new ArrayList<WhitelistVO>(map.values());
+        Collections.sort(list,new Comparator<WhitelistVO>(){
+            public int compare(WhitelistVO arg0, WhitelistVO arg1) {
+                return arg0.getElbName().compareTo(arg1.getElbName());
+            }
+        });
+
+        return list;
+    }
 
 
     /**
@@ -39,7 +113,7 @@ public class WhitelistServiceImpl implements WhitelistService {
 
 
 
-        // 2. fetch all EJB listener
+        // 2. fetch all ELB listener
         List<? extends ListenerV2> list = osClient.networking().lbaasV2().listener().list();
 
         if (list == null || list.isEmpty()) {
@@ -48,7 +122,7 @@ public class WhitelistServiceImpl implements WhitelistService {
 
 
 
-        // 3. fetch all existing EJB whitelists
+        // 3. fetch all existing ELB whitelists
         NeutronWhitelist.NeutronWhitelists res = osClient.networking().lbaasV2().lbWhitelist().list();
         List<NeutronWhitelist> whitelists  = res.getList();
 

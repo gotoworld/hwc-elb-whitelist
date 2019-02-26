@@ -30,7 +30,7 @@
 
     <!-- logback为java中的包 -->
     <logger name="wt.devops"/>
-    <logger name="wt.devops.hwcejbwhitelist" level="DEBUG" additivity="false">
+    <logger name="wt.devops.hwcelbwhitelist" level="DEBUG" additivity="false">
         <appender-ref ref="console"/>
     </logger>
 </configuration>

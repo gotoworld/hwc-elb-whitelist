@@ -1,4 +1,4 @@
-package wt.devops.hwcejbwhitelist;
+package wt.devops.hwcelbwhitelist;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,10 +10,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @date 19-2-20
  */
 @SpringBootApplication
-public class HwcEjbWhitelistApplication {
+public class HwcElbWhitelistApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(HwcEjbWhitelistApplication.class, args);
+		SpringApplication.run(HwcElbWhitelistApplication.class, args);
 	}
 
 }

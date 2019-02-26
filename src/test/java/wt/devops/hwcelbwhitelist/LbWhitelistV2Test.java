@@ -13,15 +13,13 @@
  * 	License for the specific language governing permissions and limitations under    
  * 	the License.                                                                     
  *******************************************************************************/
- package wt.devops.hwcejbwhitelist;
+ package wt.devops.hwcelbwhitelist;
 
 import java.io.IOException;
 import java.util.*;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.huawei.openstack4j.api.OSClient;
 import com.huawei.openstack4j.core.transport.Config;
-import com.huawei.openstack4j.model.common.Identifier;
 import com.huawei.openstack4j.model.network.ext.ListenerV2;
 import com.huawei.openstack4j.openstack.OSFactory;
 import org.junit.Assert;

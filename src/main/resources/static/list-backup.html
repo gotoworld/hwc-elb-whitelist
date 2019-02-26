@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/layui/css/layui.css"  media="all">
+</head>
+<body>
+
+<div class="demoTable">
+    <button class="layui-btn" data-type="reload">刷新列表</button>
+</div>
+
+<table class="layui-hide" id="LAY_table_user" lay-filter="user"></table>
+
+
+<script src="/layui/layui.all.js" charset="utf-8"></script>
+<script type="text/html" id="switchTpl">
+    <input type="checkbox" name="enableWhitelist" disabled="disabled"  lay-skin="switch" lay-text="开|关"  {{ d.enableWhitelist ? 'checked' : '' }}>
+</script>
+
+<script>
+    alert(localStorage.getItem("region"));
+
+    layui.use('table', function(){
+        var table = layui.table;
+
+        //方法级渲染
+        table.render({
+            elem: '#LAY_table_user'
+            ,url: '/huaweicloud/elb/whitelist/list'
+            ,method: 'post'
+            ,contentType : 'application/json'
+            ,where:{
+                ak: "0NOQ6HRWCGCRPZPVAPXC",
+                domain: "myhuaweicloud.com",
+                projectId: "0225b008b77b4cb7b124e3a019486901",
+                region: "cn-south-1",
+                sk: "ncXygdgld370vJCjzVUbBOo1E3IddkXjJYebDrLO",
+                whitelist: "string"
+            }
+            ,title: 'ELB 白名单列表'
+            ,cols: [[
+                {checkbox: true, fixed: true}
+                ,{field:'id', title: 'ID',hide: 'true', width:40, fixed: true}
+                ,{field:'elbName', title: 'ELB Name',sort: true,  width:150}
+                ,{field:'listenerName', title: 'Listener Name', width:200}
+                ,{field:'enableWhitelist', title:'Status', align:'center', width:85, templet: '#switchTpl', unresize: true}
+                ,{field:'whitelist', title: 'Whitelist', height:80}
+            ]]
+            ,id: 'testReload'
+            ,page: false
+            ,height: 315
+        });
+
+
+        var $ = layui.$, active = {
+            reload: function(){
+                var demoReload = $('#demoReload');
+
+                //执行重载
+                table.reload('testReload', {
+                    where: {
+                        key: {
+                            id: demoReload.val()
+                        }
+                    }
+                });
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+</script>
+
+
+</body>
+</html>

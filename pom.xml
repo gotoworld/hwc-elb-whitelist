@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>wt.devops</groupId>
-	<artifactId>hwc-ejb-whitelist</artifactId>
+	<artifactId>hwc-elb-whitelist</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>hwc-ejb-whitelist</name>
-	<description>hwc-ejb-whitelist project</description>
+	<name>hwc-elb-whitelist</name>
+	<description>hwc-elb-whitelist project</description>
 
 	<properties>
 		<java.version>1.8</java.version>

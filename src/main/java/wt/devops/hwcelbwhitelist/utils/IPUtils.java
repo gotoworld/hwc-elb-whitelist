@@ -1,4 +1,4 @@
-package wt.devops.hwcejbwhitelist.utils;
+package wt.devops.hwcelbwhitelist.utils;
  
  import javax.servlet.http.HttpServletRequest;
 

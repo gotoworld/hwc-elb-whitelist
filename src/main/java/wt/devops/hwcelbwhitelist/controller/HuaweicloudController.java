@@ -1,4 +1,4 @@
-package wt.devops.hwcejbwhitelist.controller;
+package wt.devops.hwcelbwhitelist.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

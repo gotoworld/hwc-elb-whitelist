@@ -4,7 +4,7 @@ FROM openjdk:8-jdk-alpine
 MAINTAINER uname.chen@gmail.com
 
 VOLUME /tmp
-COPY target/hwc-ejb-whitelist-0.0.1-SNAPSHOT.jar /opt/workdir/app.jar
+COPY target/hwc-elb-whitelist-0.0.1-SNAPSHOT.jar /opt/workdir/app.jar
 
 EXPOSE 8000
 

@@ -1,4 +1,4 @@
-package wt.devops.hwcejbwhitelist.controller;
+package wt.devops.hwcelbwhitelist.controller;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package wt.devops.hwcejbwhitelist;
+package wt.devops.hwcelbwhitelist;
 
 import javax.annotation.Resource;
 
@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import wt.devops.hwcejbwhitelist.intercepter.AuditInterceptor;
+import wt.devops.hwcelbwhitelist.intercepter.AuditInterceptor;
 
 /**
  * @ClassName: WebConfig
@@ -22,6 +22,6 @@ public class WebConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(auditInterceptor).addPathPatterns("/huaweicloud/ejb/whitelist/**");
+		registry.addInterceptor(auditInterceptor).addPathPatterns("/huaweicloud/elb/whitelist/**");
 	}
 }

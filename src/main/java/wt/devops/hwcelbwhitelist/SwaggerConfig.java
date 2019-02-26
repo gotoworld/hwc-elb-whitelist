@@ -1,4 +1,4 @@
-package wt.devops.hwcejbwhitelist;
+package wt.devops.hwcelbwhitelist;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,14 +26,14 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("wt.devops.hwcejbwhitelist"))
+                .apis(RequestHandlerSelectors.basePackage("wt.devops.hwcelbwhitelist"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Hwcejbwhitelist RESTful APIs v1")
+                .title("Hwcelbwhitelist RESTful APIs v1")
                 .description("The APIs here demonstrate creating a 'production-ready' service")
                 .termsOfServiceUrl("http://devops.wt")
                 .version("1.0")
