@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @date 19-2-26
  */
 @Data
-public class WhitelistVO {
+public class WhitelistVO implements  Serializable{
 
     String id;
 

@@ -2,6 +2,7 @@ package wt.devops.hwcelbwhitelist.pojo;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
  * @date 19-2-26
  */
 @Data
-public class ResponseVO<T> {
+public class ResponseVO<T>  implements Serializable {
 
     private String code;
     private String msg;
