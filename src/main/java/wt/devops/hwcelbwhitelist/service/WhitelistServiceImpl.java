@@ -32,6 +32,11 @@ public class WhitelistServiceImpl implements WhitelistService {
     @Override
     public List<WhitelistVO> getWhitelist(HuaweicloudContext context){
 
+        // 0. prepare & check
+        if(isContextMissing(context)){
+            return new ArrayList<WhitelistVO>();
+        }
+
         // 1. init huaweicloud SDK client
         OSClient.OSClientAKSK osClient = initialClient(context);
 
@@ -94,6 +99,16 @@ public class WhitelistServiceImpl implements WhitelistService {
         });
 
         return list;
+    }
+
+    /**
+     *
+     * @param context
+     * @return
+     */
+    private boolean isContextMissing(HuaweicloudContext context) {
+        return context == null || context.getRegion() == null || context.getDomain() == null || context.getProjectId() == null
+           || context.getAk() == null || context.getSk() == null;
     }
 
 

@@ -170,9 +170,7 @@
                 </div>
 
                 <div class="layui-form-item" style="text-align: left;margin-top:30px;padding-left:170px">
-                    <button class="layui-btn layui-btn-normal reloadlist" lay-submit="" lay-filter="configAndlist"
-                            data-type="reload"> 配置 上下文
-                    </button>
+                    <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="configAndlist" data-type="reload"> 配置 上下文</button>
                 </div>
 
 
@@ -254,9 +252,6 @@
 
             //监听提交
             form.on('submit(configAndlist)', function (data) {
-
-                console.log(data.field);
-
                 $.ajax({
                     url: '/huaweicloud/elb/whitelist/list',
                     data: JSON.stringify(data.field),
@@ -270,7 +265,7 @@
                 setTimeout(function () {
                     location.reload();
                     document.body.scrollTop !== 0 ? document.body.scrollTop = 0 : null;
-                }, 30000);
+                }, 3000);
 
 
                 localStorage.setItem("region", data.field.region);
@@ -308,26 +303,16 @@
                     type: 'PUT',
                     contentType: 'application/json',
                     complete: function () {
-                        layer.msg('成功配置！', {icon: 1});
-
-
-                        var demoReload = $('#demoReload');
+                        layer.msg('启用&更新 白名单 完成！', {icon: 1});
 
                         //执行重载
                         layui.table.reload('testReload', {
                             where: {
-                                key: {
-                                    id: demoReload.val()
-                                }
                             }
                         });
                     }
 
                 });
-                setTimeout(function () {
-                    location.reload();
-                    document.body.scrollTop !== 0 ? document.body.scrollTop = 0 : null;
-                }, 30000);
 
 
                 localStorage.setItem("region", data.field.region);
@@ -365,7 +350,7 @@
                     type: 'PUT',
                     contentType: 'application/json',
                     complete: function () {
-                        layer.msg('成功配置！', {icon: 1});
+                        layer.msg('启用 白名单 完成！', {icon: 1});
 
 
                         var demoReload = $('#demoReload');
@@ -381,10 +366,6 @@
                     }
 
                 });
-                setTimeout(function () {
-                    location.reload();
-                    document.body.scrollTop !== 0 ? document.body.scrollTop = 0 : null;
-                }, 30000);
 
 
                 localStorage.setItem("region", data.field.region);
@@ -423,7 +404,7 @@
                     type: 'PUT',
                     contentType: 'application/json',
                     complete: function () {
-                        layer.msg('成功配置！', {icon: 1});
+                        layer.msg('停用 白名单 完成！', {icon: 1});
 
 
                         var demoReload = $('#demoReload');
@@ -439,10 +420,6 @@
                     }
 
                 });
-                setTimeout(function () {
-                    location.reload();
-                    document.body.scrollTop !== 0 ? document.body.scrollTop = 0 : null;
-                }, 30000);
 
 
                 localStorage.setItem("region", data.field.region);
@@ -480,7 +457,7 @@
                     type: 'PUT',
                     contentType: 'application/json',
                     complete: function () {
-                        layer.msg('成功配置！', {icon: 1});
+                        layer.msg('更新配置完成！', {icon: 1});
 
                         var demoReload = $('#demoReload');
 
@@ -495,10 +472,6 @@
                     }
 
                 });
-                setTimeout(function () {
-                    location.reload();
-                    document.body.scrollTop !== 0 ? document.body.scrollTop = 0 : null;
-                }, 30000);
 
 
                 localStorage.setItem("region", data.field.region);
@@ -545,10 +518,10 @@
             var table = layui.table;
 
 
-            if (!isContextAllCconfiged()) {
-                layer.msg('Please entry the context info');
-                return;
-            }
+<!--            if (!isContextAllCconfiged()) {-->
+<!--                layer.msg('Please entry the context info');-->
+<!--                return;-->
+<!--            }-->
 
 
             //方法级渲染
@@ -566,7 +539,7 @@
                     whitelist: localStorage.getItem("whitelist")
                 }
                 , toolbar: '#toolbarDemo'
-                , title: 'ELB 白名单列表'
+                , title: 'Huaweicloud ELB Whitelist'
                 , cols: [[
                     {checkbox: true, fixed: true}
                     , {field: 'id', title: 'ID', hide: true, width: 300, fixed: true}
@@ -602,6 +575,20 @@
                     });
                 }
             };
+
+
+            $('.reloadlist').on('click', function(){
+                alert("reload");
+
+
+
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+
+
+
+
 
 
              //头工具栏事件
