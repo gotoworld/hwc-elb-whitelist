@@ -10,12 +10,12 @@
     <link rel="stylesheet" href="/layui/css/layui.css"  media="all">
     <style type="text/css">
         #center{
-            width:980px;
+            width:1080px;
             height:450px;
             position: absolute;
             left:50%;
-            margin-top: 120px;
-            margin-left: -480px;
+            margin-top: 20px;
+            margin-left: -540px;
         }
 
         .layui-btn{margin-right: 50px}
@@ -24,14 +24,15 @@
         .inline-input {width: 230px}
         .layui-form-label,.layui-field-title {color:#fff;}
 
+        .layui-btn-sm {margin-left: 30px;}
+
         *{margin:0;padding:0;list-style-type:none;}
         body {
             background-color: #fff;
             margin: 0px;
-            overflow: hidden;
             font-family:arial;
             /*color:#fff;*/
-            overflow: hidden;
+            /*overflow: hidden;*/
         }
 
         #canvas{
@@ -42,11 +43,11 @@
             top:0;
             left:0;
             background-color: #1a1724;
-            overflow: hidden;
         }
         .canvas-wrap{
             position:relative;
-            height:100%;
+            height:1280px;
+            /*height:100%;*/
         }
         div.canvas-content{
             position:relative;
@@ -56,12 +57,6 @@
             padding-top:30px;
         }
         .element::-webkit-scrollbar { width: 0 !important }
-
-
-        #navigate {position: absolute;top:0px;right:0px;color:white !important}
-        #navigate .layui-breadcrumb span[lay-separator] {color:white !important}
-        #navigate a {color:white !important}
-        #navigate a:hover {color:blue}
     </style>
 </head>
 <body>
@@ -71,13 +66,6 @@
 
 
 <div id="center">
-    <div id="navigate">
-                <span class="layui-breadcrumb">
-                  <a href="/">全局设置</a>
-                  <a href="/list.html">自助设置</a>
-                  <a href="https://auth.huaweicloud.com/authui/login#/login" target="_blank">华为云</a>
-                </span>
-    </div>
 
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
     <legend>Huaweicloud ELB Whitelist Tools</legend>
@@ -131,14 +119,37 @@
     </div>
 
     <div class="layui-form-item" style="text-align: left;margin-top:30px;padding-left:170px">
-        <button class="layui-btn" lay-submit="" lay-filter="switchon">启用&更新白名单 (全局)</button>
-        <button class="layui-btn layui-btn-danger" lay-submit="" lay-filter="switchoff">停用&更新白名单 (全局)</button>
-        <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="upload">上传白名单 (全局)</button>
+        <button class="layui-btn layui-btn-normal reloadlist" lay-submit="" lay-filter="configAndlist" data-type="reload"> 配置 上下文 </button>
     </div>
+
+
+
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 80px;">
+        <legend>Huaweicloud ELB Whitelist List</legend>
+    </fieldset>
+
+
+<!--    <div class="demoTable" style="text-align: right;margin-top: 40px">-->
+<!--        <button class="layui-btn" data-type="reload">刷新列表</button>-->
+<!--    </div>-->
+
+    <table class="layui-hide" id="LAY_table_user" lay-filter="user"></table>
+
+
+    <script type="text/html" id="toolbarDemo">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="whSwitchonAndUpload">启动&更新 白名单</button>
+            <button class="layui-btn layui-btn-sm" lay-submit="" lay-filter="whSwitchOff">停用 白名单</button>
+            <button class="layui-btn layui-btn-sm" lay-submit="" lay-filter="whSwitchon">启用 白名单</button>
+            <button class="layui-btn layui-btn-sm" lay-submit="" lay-filter="whUpload">更新 白名单</button>
+        </div>
+    </script>
+
 
 </form>
 
-</div>
+
+</div> <!-- center -->
 </div>
 </div>
 
@@ -177,120 +188,26 @@
 
 
         //监听提交
-        form.on('submit(switchon)', function(data){
-            layer.confirm('确认启用白名单？',
-                {
-                    btn: ['确定','取消'] //按钮
+        form.on('submit(configAndlist)', function(data){
 
-                },
-
-                function(index){
                     $.ajax({
-                        url: '/huaweicloud/elb/whitelist/switch-on',
-                        data: JSON.stringify(data.field),
-                        type:'PUT',
-                        contentType : 'application/json',
-                        complete:function(){
-                            layer.msg('成功启用白名单！', {icon: 1});
-                        }
-
-                    });
-                    setTimeout(function(){
-                        location.reload();
-                        document.body.scrollTop!==0?document.body.scrollTop=0:null;
-                    },30000);
-
-                },
-                function(index){
-
-                    layer.msg('已取消操作！', {icon: 1});
-
-                }
-            );
-
-
-            localStorage.setItem("region", data.field.region);
-            localStorage.setItem("domain", data.field.domain);
-            localStorage.setItem("projectId", data.field.projectId);
-            localStorage.setItem("ak", data.field.ak);
-            localStorage.setItem("sk", data.field.sk);
-            localStorage.setItem("whitelist", data.field.whitelist);
-
-
-            return false;
-        });
-
-        form.on('submit(switchoff)', function(data){
-            layer.confirm('确认停用白名单？',
-                {
-                    btn: ['确定','取消'] //按钮
-
-                },
-
-                function(index){
-                    $.ajax({
-                        url: '/huaweicloud/elb/whitelist/switch-off',
-                        data: JSON.stringify(data.field),
-                        type:'PUT',
-                        contentType : 'application/json',
-                        complete:function(){
-                            layer.msg('成功停用白名单！', {icon: 1});
-                        }
-
-                    });
-                    setTimeout(function(){
-                        location.reload();
-                        document.body.scrollTop!==0?document.body.scrollTop=0:null;
-                    },30000);
-
-                },
-                function(index){
-
-                    layer.msg('已取消操作！', {icon: 1});
-
-                }
-            );
-
-            localStorage.setItem("region", data.field.region);
-            localStorage.setItem("domain", data.field.domain);
-            localStorage.setItem("projectId", data.field.projectId);
-            localStorage.setItem("ak", data.field.ak);
-            localStorage.setItem("sk", data.field.sk);
-            localStorage.setItem("whitelist", data.field.whitelist);
-
-            return false;
-        });
-
-        form.on('submit(upload)', function(data){
-            layer.confirm('确认上传白名单？',
-                {
-                    btn: ['确定','取消'] //按钮
-
-                },
-
-                function(index){
-                    $.ajax({
-                        url: '/huaweicloud/elb/whitelist/',
+                        url: '/huaweicloud/elb/whitelist/list',
                         data: JSON.stringify(data.field),
                         type:'POST',
                         contentType : 'application/json',
                         complete:function(){
-                            layer.msg('成功上传白名单！', {icon: 1});
+                            layer.msg('成功配置！', {icon: 1});
                         }
 
                     });
                     setTimeout(function(){
                         location.reload();
                         document.body.scrollTop!==0?document.body.scrollTop=0:null;
-                    },3000);
+                    },30000);
 
-                },
-                function(index){
 
-                    layer.msg('已取消操作！', {icon: 1});
 
-                }
-            );
+
 
             localStorage.setItem("region", data.field.region);
             localStorage.setItem("domain", data.field.domain);
@@ -299,8 +216,15 @@
             localStorage.setItem("sk", data.field.sk);
             localStorage.setItem("whitelist", data.field.whitelist);
 
+
             return false;
-        });
+        })
+
+
+
+
+
+
 
         //表单初始赋值
         form.val('whitelistform', {
@@ -313,6 +237,114 @@
         })
     });
 </script>
+
+
+    <script type="text/html" id="switchTpl">
+        <input type="checkbox" name="enableWhitelist" disabled="disabled"  lay-skin="switch" lay-text="开|关"  {{ d.enableWhitelist ? 'checked' : '' }}>
+    </script>
+
+    <script>
+
+        function isConfiged(fieldName){
+            var value = localStorage.getItem("" + fieldName) ;
+            return !(!value || value == '');
+        }
+
+        function isContextAllCconfiged(){
+            return isConfiged("region")
+                     & isConfiged("domain")
+                        & isConfiged("projectId")
+                             & isConfiged("ak")
+                                & isConfiged("sk") ;
+        }
+
+        layui.use('table', function(){
+            var table = layui.table;
+
+
+            if(! isContextAllCconfiged()){
+                layer.msg('Please entry the context info');
+                return;
+            }
+
+
+            //方法级渲染
+            table.render({
+                elem: '#LAY_table_user'
+                ,url: '/huaweicloud/elb/whitelist/list'
+                ,method: 'post'
+                ,contentType : 'application/json'
+                ,where:{
+                    region: localStorage.getItem("region"),
+                    domain: localStorage.getItem("domain"),
+                    projectId: localStorage.getItem("projectId"),
+                    ak: localStorage.getItem("ak"),
+                    sk: localStorage.getItem("sk"),
+                    whitelist: localStorage.getItem("whitelist")
+                }
+                ,toolbar: '#toolbarDemo'
+                ,title: 'ELB 白名单列表'
+                ,cols: [[
+                    {checkbox: true, fixed: true}
+                    ,{field:'id', title: 'ID',hide: 'true', width:40, fixed: true}
+                    ,{field:'elbName', title: 'ELB Name',sort: true,  width:150}
+                    ,{field:'listenerName', title: 'Listener Name', width:200}
+                    ,{field:'enableWhitelist', title:'Status', align:'center', width:85, templet: '#switchTpl', unresize: true}
+                    ,{field:'whitelistNoCommaSplit', title: 'Whitelist', height:80}
+                ]]
+                ,id: 'testReload'
+                ,page: false
+                ,height: 615
+            });
+
+
+            var $ = layui.$, active = {
+                reload: function(){
+                    var demoReload = $('#demoReload');
+
+                    //执行重载
+                    table.reload('testReload', {
+                        where: {
+                            key: {
+                                id: demoReload.val()
+                            }
+                        }
+                    });
+                }
+            };
+
+            $('.reloadlist').on('click', function(){
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+
+
+
+            //头工具栏事件
+            table.on('toolbar(LAY_table_user)', function(obj){
+                var checkStatus = table.checkStatus(obj.config.id);
+                switch(obj.event){
+                    case 'whSwitchonAndUpload':
+                        var data = checkStatus.data;
+                        layer.alert(JSON.stringify(data));
+                        break;
+                    case 'getCheckLength':
+                        var data = checkStatus.data;
+                        layer.msg('选中了：'+ data.length + ' 个');
+                        break;
+                    case 'isAll':
+                        layer.msg(checkStatus.isAll ? '全选': '未全选');
+                        break;
+                };
+            });
+
+
+
+
+
+        });
+
+    </script>
 
     <script src="js/three.min.js"></script>
     <script src="js/projector.js"></script>

@@ -27,4 +27,13 @@ public interface WhitelistService {
      * @return
      */
     List<WhitelistVO> getWhitelist(HuaweicloudContext context);
+
+
+    /**
+     *
+     * @param context
+     * @param isUpdateSwitch
+     * @param isSwithOn
+     */
+    void updateSelectWhitelist(HuaweicloudContext context, boolean isUpdateSwitch, boolean isSwithOn, boolean isUpdateWhiteList);
 }

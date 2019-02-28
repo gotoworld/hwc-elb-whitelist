@@ -1,6 +1,9 @@
 package wt.devops.hwcelbwhitelist.controller;
 
 import lombok.Data;
+import wt.devops.hwcelbwhitelist.pojo.WhitelistVO;
+
+import java.util.List;
 
 /**
  * Description
@@ -17,4 +20,8 @@ public class HuaweicloudContext {
     String sk;
 
     String whitelist;
+
+
+    List<WhitelistVO> whitelistVoList;
+
 }

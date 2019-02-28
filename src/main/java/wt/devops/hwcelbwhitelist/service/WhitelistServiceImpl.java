@@ -64,7 +64,7 @@ public class WhitelistServiceImpl implements WhitelistService {
                 vo.setListenerId(listenerV2.getId());
                 vo.setListenerName(listenerV2.getName());
 
-                vo.setId(listenerV2.getId()); //
+//                vo.setId(listenerV2.getId()); //
             }
         }
 
@@ -80,7 +80,7 @@ public class WhitelistServiceImpl implements WhitelistService {
                 vo.setWhitelistId(whitelist1.getId());
                 vo.setEnableWhitelist(whitelist1.isEnableWhitelist());
 
-//                vo.setId(whitelist1.getId());
+                vo.setId(whitelist1.getId());
             }
         }
 
@@ -154,6 +154,56 @@ public class WhitelistServiceImpl implements WhitelistService {
 
     /**
      *
+     * @param context
+     * @param isSwithOn
+     */
+    @Override
+    public void updateSelectWhitelist(HuaweicloudContext context, boolean isUpdateSwitch, boolean isSwithOn, boolean isUpdateWhiteList) {
+
+        String whitelist = context.getWhitelist();
+        List<WhitelistVO> whitelistVoList = context.getWhitelistVoList();
+
+        // null whitelistVoList
+
+        // 1. init huaweicloud SDK client
+        OSClient.OSClientAKSK osClient = initialClient(context);
+
+
+
+        // 2. fetch all ELB listener
+        List<? extends ListenerV2> list = osClient.networking().lbaasV2().listener().list();
+
+        Map<String, ListenerV2> listenerV2Map = new HashMap<String, ListenerV2>();
+        if (list == null || list.isEmpty()) {
+            return;
+        } else {
+            for(ListenerV2 v2 : list){
+                listenerV2Map.put(v2.getId(), v2);
+            }
+        }
+
+
+        // 3. update or create  whithlist by selected listener and it's switch updated by #isSwithOn
+        for (WhitelistVO whitelistVO : whitelistVoList) {
+
+            NeutronWhitelist response = null;
+            if(whitelistVO.getWhitelist() == null){//create model
+                ListenerV2 listenerV2 = listenerV2Map.get(whitelistVO.getListenerId()); //assert listenerV2 not null
+                NeutronWhitelist model = composeNeutronWhitelist(isUpdateSwitch, isSwithOn, isUpdateWhiteList, whitelist, listenerV2);
+
+                response = osClient.networking().lbaasV2().lbWhitelist().create(model);
+            }else{ //update model
+                NeutronWhitelistUpdate updateModel = composeNeutronWhitelistUpdate(isUpdateSwitch, isSwithOn, isUpdateWhiteList, whitelist, whitelistVO);
+
+                response = osClient.networking().lbaasV2().lbWhitelist().update(updateModel, whitelistVO.getWhitelistId());
+            }
+        }
+
+    }
+
+
+    /**
+     *
      * @param isUpdateSwitch
      * @param isSwithOn
      * @param whitelist
@@ -175,6 +225,36 @@ public class WhitelistServiceImpl implements WhitelistService {
      * @param isUpdateSwitch
      * @param isSwithOn
      * @param whitelist
+     * @param listenerV2
+     * @return
+     */
+    private NeutronWhitelist composeNeutronWhitelist(boolean isUpdateSwitch, boolean isSwithOn, boolean isUpdateWhiteList, String whitelist, ListenerV2 listenerV2) {
+        NeutronWhitelist model = null;
+        if(isUpdateSwitch){
+            if (isUpdateWhiteList) {
+                model = NeutronWhitelist.builder().listenerId(listenerV2.getId()).whitelist(whitelist).enableWhitelist(isSwithOn).build();
+            } else {
+                model = NeutronWhitelist.builder().listenerId(listenerV2.getId()).enableWhitelist(isSwithOn).build();
+            }
+        }else {
+
+                model = NeutronWhitelist.builder().listenerId(listenerV2.getId()).whitelist(whitelist).build();
+
+//            if (isUpdateWhiteList) {
+//                model = NeutronWhitelist.builder().listenerId(listenerV2.getId()).whitelist(whitelist).build();
+//            } else {
+////                throw new Exception("");
+//            }
+        }
+        return model;
+    }
+
+
+    /**
+     *
+     * @param isUpdateSwitch
+     * @param isSwithOn
+     * @param whitelist
      * @return
      */
     private NeutronWhitelistUpdate getNeutronWhitelistUpdate(boolean isUpdateSwitch, boolean isSwithOn, String whitelist) {
@@ -183,6 +263,34 @@ public class WhitelistServiceImpl implements WhitelistService {
             updateModel  = NeutronWhitelistUpdate.builder().whitelist(whitelist).enableWhitelist(isSwithOn).build();
         }else {
             updateModel  = NeutronWhitelistUpdate.builder().whitelist(whitelist).build();
+        }
+        return updateModel;
+    }
+
+
+    /**
+     *
+     * @param isUpdateSwitch
+     * @param isSwithOn
+     * @param whitelist
+     * @return
+     */
+    private NeutronWhitelistUpdate composeNeutronWhitelistUpdate(boolean isUpdateSwitch, boolean isSwithOn, boolean isUpdateWhiteList, String whitelist, WhitelistVO whitelistVO) {
+        NeutronWhitelistUpdate updateModel = null;
+        if(isUpdateSwitch){
+            if (isUpdateWhiteList) {
+                updateModel  = NeutronWhitelistUpdate.builder().whitelist(whitelist).enableWhitelist(isSwithOn).build();
+            } else {
+                updateModel  = NeutronWhitelistUpdate.builder().enableWhitelist(isSwithOn).build();
+            }
+        }else {
+                updateModel  = NeutronWhitelistUpdate.builder().whitelist(whitelist).enableWhitelist(whitelistVO.isEnableWhitelist()).build();
+
+//            if (isUpdateWhiteList) {
+//                updateModel  = NeutronWhitelistUpdate.builder().whitelist(whitelist).build();
+//            } else {
+////                throw new Exception("");
+//            }
         }
         return updateModel;
     }
