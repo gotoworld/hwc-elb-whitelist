@@ -27,6 +27,9 @@ public class WhitelistVO implements  Serializable{
     boolean enableWhitelist;
 
     //
+    public WhitelistVO() {
+    }
+    
     public WhitelistVO(String elbId, String elbName) {
         this.elbId = elbId;
         this.elbName = elbName;
