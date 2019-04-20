@@ -3,6 +3,7 @@ package wt.devops.hwcelbwhitelist.controller;
 import lombok.Data;
 import wt.devops.hwcelbwhitelist.pojo.WhitelistVO;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,7 +13,8 @@ import java.util.List;
  * @date 19-2-20
  */
 @Data
-public class HuaweicloudContext {
+public class HuaweicloudContext implements Serializable {
+  
     String region;
     String domain;
     String projectId;
